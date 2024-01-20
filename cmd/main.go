@@ -2,32 +2,13 @@ package main
 
 import (
 	_ "crypto/elliptic"
-	"fmt"
-	"github.com/kushthedude/tigerbeetle-benchmark/internal/constants"
-	"github.com/kushthedude/tigerbeetle-benchmark/internal/tigerbeetle"
+	"github.com/kushthedude/tigerbeetle-benchmark/internal/router"
 )
 
 func main() {
-	constants.InitPrivateKey()
-
-	// Assume these are constants you've defined for your application:
-
-	success, err := tigerbeetle.CreateAccount(5, 3)
-	if !success || err != nil {
-		print(success)
-		print(err)
-		panic("failed in create accoint")
+	serverObject := router.NewRouter(3001)
+	err := serverObject.RunServer()
+	if err != nil {
+		panic("failed to run server")
 	}
-	success, err = tigerbeetle.CreateAccount(6, 3)
-	if !success || err != nil {
-		print(success)
-		print(err)
-		panic("failed in create accoint")
-	}
-
-	success, err = tigerbeetle.PostCredits(1, 2, 100, 3)
-	if !success || err != nil {
-		panic("failed in create credit")
-	}
-	fmt.Println("PASS")
 }

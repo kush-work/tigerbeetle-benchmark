@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	TigerbeetleServerAddress = "127.0.0.1:3001"
+	TigerbeetleServerAddress = "127.0.0.1:3000"
 	AccountTypeCode          = uint16(718)
 	AccountFlags             = uint16(0)
 	ClusterID                = 0

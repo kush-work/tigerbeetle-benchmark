@@ -40,6 +40,7 @@ func CreateAccount(c *gin.Context) {
 			"error":   "failed to unmarshal AccountRequest Body",
 			"message": err,
 		})
+		return
 	}
 
 	err = json.Unmarshal(jsonData, &getAccountRequest)
@@ -48,6 +49,7 @@ func CreateAccount(c *gin.Context) {
 			"error":   "failed to unmarshal AccountRequest Body",
 			"message": err,
 		})
+		return
 	}
 
 	success, err := tigerbeetle.CreateAccount(uint64(getAccountRequest.AccountID), uint32(getAccountRequest.LedgerID))
@@ -56,11 +58,13 @@ func CreateAccount(c *gin.Context) {
 			"error":   "failed to create account",
 			"message": err,
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": "true",
 	})
+	return
 }
 
 func CreateTransaction(c *gin.Context) {
@@ -70,6 +74,7 @@ func CreateTransaction(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "failed to read createTransaction Body",
 		})
+		return
 	}
 
 	err = json.Unmarshal(jsonData, &createTransactionRequest)
@@ -77,6 +82,7 @@ func CreateTransaction(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "failed to unmarshal createTransaction Body",
 		})
+		return
 	}
 
 	amountInLowest := utils.GetAmountInLowestForm(createTransactionRequest.Amount)
@@ -87,11 +93,13 @@ func CreateTransaction(c *gin.Context) {
 			"error":   "failed to create transaction",
 			"message": err,
 		})
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"success":       "true",
 		"transactionID": txnID,
 	})
+	return
 }
 
 func GetAccount(c *gin.Context) {
@@ -101,6 +109,7 @@ func GetAccount(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "failed to read GetAccountRequest Body",
 		})
+		return
 	}
 
 	err = json.Unmarshal(jsonData, &getAccountRequest)
@@ -108,6 +117,7 @@ func GetAccount(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "failed to unmarshal GetAccountRequest Body",
 		})
+		return
 	}
 
 	account, err := tigerbeetle.GetAccount(uint64(getAccountRequest.AccountID))
@@ -116,8 +126,10 @@ func GetAccount(c *gin.Context) {
 			"error":   "failed to get account",
 			"message": err,
 		})
+		return
 	}
 	c.JSON(http.StatusOK, account)
+	return
 }
 
 func GetTransaction(c *gin.Context) {
@@ -127,6 +139,7 @@ func GetTransaction(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "failed to read GetTransaction Body",
 		})
+		return
 	}
 
 	err = json.Unmarshal(jsonData, &getTransactionRequest)
@@ -134,6 +147,7 @@ func GetTransaction(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "failed to unmarshal GetTransactionRequest Body",
 		})
+		return
 	}
 
 	transaction, err := tigerbeetle.GetTransactionDetails(uint64(getTransactionRequest.TransactionID))
@@ -142,6 +156,8 @@ func GetTransaction(c *gin.Context) {
 			"error":   "failed to get transaction",
 			"message": err,
 		})
+		return
 	}
 	c.JSON(http.StatusOK, transaction)
+	return
 }
